@@ -13,14 +13,8 @@ bin/tspr               Remove multiple jobs
 
 ## Setup
 
-1. Make sure the scripts in `bin` are executable.
+Run this script.
 
 ```bash
-chmod +x bin/*
-```
-
-2. Add `bin` to your `$PATH`.
-
-```bash
-echo 'export PATH="$PATH:$PWD/bin"' >> ~/.bashrc
+bash install.sh
 ```
