@@ -1,0 +1,7 @@
+#!/bin/bash
+# Copy all finished tsp logs to folder
+
+if [ -z "$1" ]; then echo "No directory supplied"; exit 1; fi
+tsp | grep -w finished | tee \
+    >(wc -l) \
+    >(tr -s ' ' | cut -d' ' -f 3 | xargs cp -t "$1")
