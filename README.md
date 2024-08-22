@@ -28,7 +28,7 @@ tspr   Remove multiple jobs
 
 ## Setup
 
-Run this script.
+Run this script. It changes `~/.bashrc`, so back up first if you are nervous :)
 
 ```bash
 bash install.sh
