@@ -1,0 +1,21 @@
+#!/bin/bash
+# Restart in-progress and queued jobs from a log file
+
+if [ -z "$1" ]; then echo "No log file supplied"; exit 1; fi
+logfile="$1"
+
+set -e
+
+# Get number of characters before the command
+nchars=$(cat "$logfile" | head -n1 | awk '{print index($0, "Command")-1}')
+
+function restartGroup(){
+    group="$1"
+    cat "$logfile" | grep -w "$group" | cut -c $(( nchars + 1 ))- | while read cmd
+    do
+        tsp $(python3 $(dirname $0)/../util/parse_tsp_command.py $cmd)
+    done
+}
+
+restartGroup running
+restartGroup queued
