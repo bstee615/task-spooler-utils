@@ -3,11 +3,10 @@
 
 if [ -z "$1" ]; then echo "No directory supplied"; exit 1; fi
 
+mkdir -p $1
+
 # Copy individual log files
-tsp | grep -w finished | tee \
-    >(wc -l) \
-    >(tr -s ' ' | cut -d' ' -f 3 | xargs cp -t "$1/") \
-    | echo >> /dev/null
+tsp | grep -w finished | tr -s ' ' | cut -d' ' -f 3 | xargs cp -t "$1/"
 
 # Copy log
 tsp > "$1/tsp.log"
