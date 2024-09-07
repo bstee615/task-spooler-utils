@@ -1,0 +1,82 @@
+#!/bin/python3
+# Remove and re-queue queued commands in a particular order.
+import re
+import subprocess
+
+def parse_tasklist_to_json(input_str):
+    lines = input_str.strip().splitlines()
+
+    # Extract headers and data
+    header = lines[0]
+    data = lines[1:]
+
+    # Identify column offsets by the position of each header
+    columns = [
+        "ID", "State", "Output", "E-Level", "Times",
+    ]
+
+    offsets = [header.find(col) for col in columns]
+
+    # Create dictionary for the parsed data
+    all_parsed_data = []
+    for line in data:
+        parsed_data = {}
+        for i, col in enumerate(columns):
+            if i == len(columns)-1:
+                value = line[offsets[i]:].rstrip()
+            else:
+                value = line[offsets[i]:offsets[i+1]].rstrip()
+            parsed_data[col] = value
+        parsed_data["ID"] = int(parsed_data["ID"])
+        all_parsed_data.append(parsed_data)
+
+    for d in all_parsed_data:
+        if d["Times"].startswith(" "):
+            d["Command"] = d["Times"].strip()
+            d["Times"] = None
+        else:
+            time, _, command = d["Times"].partition(" ")
+            d["Times"] = time
+            d["Command"] = command
+        if d["Command"].startswith("["):
+            # This is a label. Extract it.
+            m = re.match(r"\[([^]]+)\](.*)", d["Command"])
+            if m:
+                d["Label"], d["Command"] = m.groups()
+        else:
+            d["Label"] = None
+
+    # Convert to JSON
+    return all_parsed_data
+
+
+def process_log(log_data, order):
+    # Parse the log data
+    tasks = parse_tasklist_to_json(log_data)
+
+    # Filter tasks that are in the 'queued' state
+    queued_tasks = [task for task in tasks if task['State'] in ['queued']]
+
+    # Sort the queued tasks based on the command
+    def get_key(data):
+        cmd = data["Command"].split()
+        fields = []
+        for i in order:
+            fields.append(cmd[i])
+        return fields
+    sorted_queued_tasks = sorted(queued_tasks, key=get_key)
+
+    # Re-queue the tasks with "tsp $COMMAND"
+    for task in sorted_queued_tasks:
+        print(f"Re-queuing task: tsp {task['Command']}")
+        # subprocess.run(["tsp"] + task['Command'].split())
+
+    # Remove old queued tasks by their ID using "tsp -r $ID"
+    for task in queued_tasks:
+        print(f"Removing task {task['ID']}: tsp -r {task['ID']}")
+        # subprocess.run(["tsp", "-r", str(task['ID'])])
+
+if __name__ == "__main__":
+    # bash runner_no_shard.sh random_contrastive_onemessage cot_cve starchat-beta sven_individual 0 --individual --shot 6 --use_ollama --result_root ../results_starchat-beta/
+    runner_no_shard_key = [5,6,3,2,4]
+    process_log(subprocess.check_output("tsp", encoding="utf-8"), order=runner_no_shard_key)
