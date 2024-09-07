@@ -8,9 +8,11 @@ See my other project: [task-spooler-gui](https://github.com/bstee615/task-spoole
 Output generated with `list_commands.sh`.
 
 ```
-tspcp        Copy all finished tsp logs to folder
-tspr         Remove multiple jobs
-tsp-restart  Restart in-progress and queued jobs from a log file
+tsp-copy-logs  Copy all finished tsp logs to a folder
+tspcp          Copy tsp logs to folder
+tspr           Remove multiple jobs
+tsp-requeue    Remove and re-queue queued commands in a particular order.
+tsp-restart    Restart in-progress and queued jobs from a log file
 ```
 
 ## Adding new commands
