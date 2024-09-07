@@ -7,7 +7,7 @@ See my other project: [task-spooler-gui](https://github.com/bstee615/task-spoole
 
 Output generated with `list_commands.sh`.
 
-```
+```bash
 tsp-copy-logs  Copy all finished tsp logs to a folder
 tspcp          Copy tsp logs to folder
 tspr           Remove multiple jobs
@@ -26,7 +26,7 @@ tsp-restart    Restart in-progress and queued jobs from a log file
 <run your commands here>
 ```
 
-1. Update the README with the new output of `list_commands.sh`.
+1. Update the README with the new commands by running `bash renew_commands_list.sh`.
 3. Submit a PR on Github. Thanks for your contribution!
 
 ## Setup
