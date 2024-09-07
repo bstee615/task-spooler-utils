@@ -50,9 +50,14 @@ def parse_tasklist_to_json(input_str):
     return all_parsed_data
 
 
-def process_log(log_data, order):
+def get_log():
+    return subprocess.check_output("tsp", encoding="utf-8")
+
+
+def process_log(order):
     # Parse the log data
-    tasks = parse_tasklist_to_json(log_data)
+    tasks = parse_tasklist_to_json(get_log())
+    print("Loaded", len(tasks), "tasks")
 
     # Filter tasks that are in the 'queued' state
     queued_tasks = [task for task in tasks if task['State'] in ['queued']]
@@ -69,14 +74,17 @@ def process_log(log_data, order):
     # Re-queue the tasks with "tsp $COMMAND"
     for task in sorted_queued_tasks:
         print(f"Re-queuing task: tsp {task['Command']}")
-        # subprocess.run(["tsp"] + task['Command'].split())
+        subprocess.run(["tsp"] + task['Command'].split())
 
     # Remove old queued tasks by their ID using "tsp -r $ID"
     for task in queued_tasks:
         print(f"Removing task {task['ID']}: tsp -r {task['ID']}")
-        # subprocess.run(["tsp", "-r", str(task['ID'])])
+        subprocess.run(["tsp", "-r", str(task['ID'])])
+
+    tasks = parse_tasklist_to_json(get_log())
+    print("Ended with", len(tasks), "tasks")
 
 if __name__ == "__main__":
     # bash runner_no_shard.sh random_contrastive_onemessage cot_cve starchat-beta sven_individual 0 --individual --shot 6 --use_ollama --result_root ../results_starchat-beta/
     runner_no_shard_key = [5,6,3,2,4]
-    process_log(subprocess.check_output("tsp", encoding="utf-8"), order=runner_no_shard_key)
+    process_log(order=runner_no_shard_key)
