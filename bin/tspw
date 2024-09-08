@@ -1,0 +1,4 @@
+#!/bin/bash
+# Watch the running and queued jobs
+
+watch -n 5 $(dirname $0)/tspf

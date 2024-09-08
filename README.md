@@ -14,6 +14,7 @@ tspf           Print out the running and queued jobs.
 tspr           Remove multiple jobs
 tsp-requeue    Remove and re-queue queued commands in a particular order.
 tsp-restart    Restart in-progress and queued jobs from a log file
+tspw           Watch the running and queued jobs
 ```
 
 ## Adding new commands
