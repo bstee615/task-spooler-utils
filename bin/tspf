@@ -1,0 +1,4 @@
+#!/bin/bash
+# Print out the running and queued jobs.
+
+exec tsp $@ | grep -vw finished

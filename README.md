@@ -10,6 +10,7 @@ Output generated with `list_commands.sh`.
 ```bash
 tsp-copy-logs  Copy all finished tsp logs to a folder
 tspcp          Copy tsp logs to folder
+tspf           Print out the running and queued jobs.
 tspr           Remove multiple jobs
 tsp-requeue    Remove and re-queue queued commands in a particular order.
 tsp-restart    Restart in-progress and queued jobs from a log file
