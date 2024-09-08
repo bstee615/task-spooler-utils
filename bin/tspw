@@ -1,4 +1,5 @@
 #!/bin/bash
 # Watch the running and queued jobs
 
-watch -n 5 $(dirname $0)/tspf
+watch -n 5 "echo 'Unfinished jobs:' && $(dirname $0)/tspf | wc -l | xargs expr -1 + && echo '' && $(dirname $0)/tspf"
+
