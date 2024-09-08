@@ -9,4 +9,4 @@ mkdir -p "$1"
 tsp > "$1/tsp.log"
 
 # Copy individual log files
-tsp-copy-logs "$1/tsp.log" {$1}
+tsp-copy-logs "$1/tsp.log" "$1"
